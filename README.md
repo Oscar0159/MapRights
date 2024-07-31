@@ -1,5 +1,9 @@
 # Map Rights
 A Minecraft plugin that allows players to sign maps, protecting their creations from unauthorized copying.
+![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.png)
+
+# Demo
+![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.gif)
 
 ![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.png)
 
