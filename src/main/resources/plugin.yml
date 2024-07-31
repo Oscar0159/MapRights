@@ -1,0 +1,26 @@
+name: MapRights
+version: '${version}'
+author: [ArcherWn]
+
+main: com.archerwn.mapRights.MapRights
+api-version: '1.21'
+
+commands:
+    maprights:
+        description: Manage map rights, signatures, transactions, and transfers
+        usage: /<command> <action> [args]
+        aliases: [mr, mapr]
+        permission: maprights.use
+        permission-message: You do not have permission to use this command
+
+permissions:
+    maprights.use:
+        description: Allows the player to use the /maprights command
+        default: true
+
+    maprights.sign:
+        description: Allows the player to sign a map
+        default: true
+    maprights.unsign:
+        description: Allows the player to unsign a map
+        default: true

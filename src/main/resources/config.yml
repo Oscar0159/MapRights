@@ -1,0 +1,4 @@
+# Configuration file for the MapRights plugin
+
+# language, if /lang/<language>.yml exists, it will be used, otherwise the default language will be used
+language: en_US

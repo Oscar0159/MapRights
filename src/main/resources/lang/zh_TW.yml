@@ -1,0 +1,11 @@
+lore-signed-by: "§7由 §e{author} §7所有"
+
+msg-must-be-player: "你必須是一個玩家才能使用這個指令！"
+msg-must-hold-filled-map: "你必須拿著一張填滿的地圖"
+msg-map-does-not-have-metadata: "這張地圖沒有附加數據"
+msg-map-signed-by-you: "這張地圖已經被你簽名過了"
+msg-map-signed-by-other: "這張地圖已經被 {author} 簽名過了"
+msg-map-not-signed: "這張地圖沒有被簽名"
+msg-map-signed: "地圖已被簽署"
+msg-map-unsign: "地圖已經被取消簽署"
+msg-map-copy-denied: "你無法複製這張地圖"

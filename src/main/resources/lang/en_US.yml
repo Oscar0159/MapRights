@@ -1,0 +1,11 @@
+lore-signed-by: "§7Signed by §e{author}"
+
+msg-must-be-player: "You must be a player to use this command!"
+msg-must-hold-filled-map: "You must hold a filled map"
+msg-map-does-not-have-metadata: "The map does not have metadata"
+msg-map-signed-by-you: "The map is already signed by you"
+msg-map-signed-by-other: "The map is already signed by {author}"
+msg-map-not-signed: "The map is not signed"
+msg-map-signed: "The map has been signed"
+msg-map-unsign: "The map has been unsigned"
+msg-map-copy-denied: "You are not allowed to copy this map"
