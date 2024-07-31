@@ -6,13 +6,8 @@ A Minecraft plugin that allows players to sign maps, protecting their creations 
 # Demo
 ![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.gif)
 
-![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.png)
-
 # Tested Minecraft Versions
 - 1.21
-
-# Demo
-![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.gif)
 
 # Config.yml
 ```yaml
