@@ -9,7 +9,7 @@ commands:
     maprights:
         description: Manage map rights, signatures, transactions, and transfers
         usage: /<command> <action> [args]
-        aliases: [mr, mapr]
+        aliases: [mr]
         permission: maprights.use
         permission-message: You do not have permission to use this command
 
