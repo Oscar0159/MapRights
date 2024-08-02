@@ -1,26 +1,38 @@
 name: MapRights
 version: '${version}'
-author: [ArcherWn]
-
 main: com.archerwn.mapRights.MapRights
 api-version: '1.21'
+author: ArcherWn
+description: A Minecraft plugin that allows players to sign maps, protecting their creations from unauthorized copying.
+
+softdepend: [ Vault ]
 
 commands:
-    maprights:
-        description: Manage map rights, signatures, transactions, and transfers
-        usage: /<command> <action> [args]
-        aliases: [mr]
-        permission: maprights.use
-        permission-message: You do not have permission to use this command
+  maprights:
+    description: Manage map rights.
+    usage: /<command> < sign | unsign | forcesign | forceunsign >
+    aliases: [ mr ]
 
 permissions:
-    maprights.use:
-        description: Allows the player to use the /maprights command
-        default: true
+  maprights.*:
+    description: Gives access to all MapRights commands.
+    children:
+      maprights.sign: true
+      maprights.unsign: true
+      maprights.forcesign: true
+      maprights.forceunsign: true
 
-    maprights.sign:
-        description: Allows the player to sign a map
-        default: true
-    maprights.unsign:
-        description: Allows the player to unsign a map
-        default: true
+  maprights.sign:
+    description: Allows players to sign maps.
+    default: true
+  maprights.unsign:
+    description: Allows players to unsign maps.
+    default: true
+  maprights.forcesign:
+    description: Allows players to forcefully sign maps.
+    default: op
+  maprights.forceunsign:
+    description: Allows players to forcefully unsign maps.
+    default: op
+
+

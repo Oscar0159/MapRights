@@ -1,4 +1,17 @@
-# Configuration file for the MapRights plugin
+# MapRights plugin by ArcherWn
 
-# language, if /lang/<language>.yml exists, it will be used, otherwise the default language will be used
-language: en_US
+## If /lang/<language>.yml exists, it will be used,
+## otherwise the default language(en_US) will be used.
+## You can add your own language file in the /lang folder.
+language: 'en_US'
+
+economy:
+  ## Enable or disable the economy system, if enabled, [Vault] is required.
+  enable: true
+
+  ## Set to "0" to not charge for sign the map.
+  sign-cost: 1000
+
+  ## Set to "0" to not charge for unsign the map.
+  unsign-cost: 0
+

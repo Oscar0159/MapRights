@@ -1,30 +1,36 @@
 package com.archerwn.mapRights.commands;
 
 import com.archerwn.mapRights.MapRights;
-import org.bukkit.Material;
+import com.archerwn.mapRights.manager.ConfigManager;
+import com.archerwn.mapRights.manager.EconomyManager;
+import com.archerwn.mapRights.manager.LangManager;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.UUID;
+
+import static com.archerwn.mapRights.manager.MapManager.*;
 
 public class MapRightsCommand implements CommandExecutor {
 
     private final MapRights plugin = MapRights.getInstance();
 
-    private final FileConfiguration langConfig = plugin.getLangManager().getLangConfig();
+    private final ConfigManager configManager = ConfigManager.getInstance();
+
+    private final LangManager langManager = LangManager.getInstance();
+
+    private final EconomyManager economyManager = EconomyManager.getInstance();
+
+    private final Economy economy = MapRights.getEconomy();
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(langConfig.getString("msg-must-be-player"));
+            sender.sendMessage(langManager.get("message.failed.must-be-player"));
             return true;
         }
 
@@ -32,13 +38,34 @@ public class MapRightsCommand implements CommandExecutor {
             return false;
         }
 
-        // Handle the command
         switch (args[0].toLowerCase()) {
             case "sign":
+                if (!player.hasPermission("maprights.sign")) {
+                    player.sendMessage(langManager.get("message.failed.no-permission"));
+                    return true;
+                }
                 onSignCommand(player);
                 break;
             case "unsign":
+                if (!player.hasPermission("maprights.unsign")) {
+                    player.sendMessage(langManager.get("message.failed.no-permission"));
+                    return true;
+                }
                 onUnSignCommand(player);
+                break;
+            case "forcesign":
+                if (!player.hasPermission("maprights.forcesign")) {
+                    player.sendMessage(langManager.get("message.failed.no-permission"));
+                    return true;
+                }
+                onForceSignCommand(player);
+                break;
+            case "forceunsign":
+                if (!player.hasPermission("maprights.forceunsign")) {
+                    player.sendMessage(langManager.get("message.failed.no-permission"));
+                    return true;
+                }
+                onForceUnSignCommand(player);
                 break;
             default:
                 return false;
@@ -48,87 +75,114 @@ public class MapRightsCommand implements CommandExecutor {
     }
 
     private void onSignCommand(Player player) {
-        // If the player is not holding a filled map, return
-        if (player.getInventory().getItemInMainHand().getType() != Material.FILLED_MAP) {
-            player.sendMessage(langConfig.getString("msg-must-hold-filled-map"));
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!isFilledMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
             return;
         }
 
-        ItemStack item = player.getInventory().getItemInMainHand();
-
-        // If map didn't have ItemMeta, return
-        if (!item.hasItemMeta()) {
-            player.sendMessage(langConfig.getString("msg-map-does-not-have-metadata"));
+        if (isSignedMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.map-already-signed"));
             return;
         }
 
-        ItemMeta itemMeta = item.getItemMeta();
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        double signCost = configManager.getConfig().getDouble("economy.sign-cost");
+        if (economyManager.isEconomyEnabled() && !economyManager.hasBalance(player, signCost)) {
+            player.sendMessage(langManager.get("message.failed.not-enough-money").replace("{cost}",
+                    String.valueOf(signCost)));
+            return;
+        }
 
-        // If the map is already signed, return
-        if (container.has(plugin.getSignKey())) {
-            UUID uuid = UUID.fromString(container.get(plugin.getSignKey(), PersistentDataType.STRING));
-            if (uuid.equals(player.getUniqueId())) {
-                player.sendMessage(langConfig.getString("msg-map-signed-by-you"));
-                return;
+        boolean success = signMap(player, itemStack);
+        if (success) {
+            if (economyManager.isEconomyEnabled()) {
+                economyManager.withdraw(player, signCost);
+                player.sendMessage(langManager.get("message.success.map-sign-with-cost").replace("{cost}",
+                        String.valueOf(signCost)));
+            } else {
+                player.sendMessage(langManager.get("message.success.map-sign"));
             }
-            Player other = plugin.getServer().getPlayer(uuid);
-            player.sendMessage(langConfig.getString("msg-map-signed-by-other").replace("{author}", other.getName()));
-            return;
+        } else {
+            player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
         }
-
-        // Sign the map
-        UUID uuid = player.getUniqueId();
-        container.set(plugin.getSignKey(), PersistentDataType.STRING, uuid.toString());
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(langConfig.getString("lore-signed-by").replace("{author}", player.getName()));
-        itemMeta.setLore(lore);
-
-        // Set the ItemMeta back to the ItemStack
-        item.setItemMeta(itemMeta);
-
-        player.sendMessage(langConfig.getString("msg-map-signed"));
     }
 
     private void onUnSignCommand(Player player) {
-        // If the player is not holding a filled map, return
-        if (player.getInventory().getItemInMainHand().getType() != Material.FILLED_MAP) {
-            player.sendMessage(langConfig.getString("msg-must-hold-filled-map"));
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!isFilledMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
             return;
         }
 
-        ItemStack item = player.getInventory().getItemInMainHand();
-
-        // If map didn't have ItemMeta, return
-        if (!item.hasItemMeta()) {
-            player.sendMessage(langConfig.getString("msg-map-does-not-have-metadata"));
-            return;
-        }
-
-        ItemMeta itemMeta = item.getItemMeta();
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-
-        // If the map is not signed, return
-        if (!container.has(plugin.getSignKey())) {
-            player.sendMessage(langConfig.getString("msg-map-not-signed"));
+        if (!isSignedMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.map-not-signed"));
             return;
         }
 
         // If the map is signed by someone else, return
-        UUID uuid = UUID.fromString(container.get(plugin.getSignKey(), PersistentDataType.STRING));
-        if (!uuid.equals(player.getUniqueId())) {
-            Player other = plugin.getServer().getPlayer(uuid);
-            player.sendMessage(langConfig.getString("msg-map-signed-by-other").replace("{author}", other.getName()));
+        UUID signUUID = getSignUUID(itemStack);
+        UUID playerUUID = player.getUniqueId();
+        if (!signUUID.equals(playerUUID)) {
+            Player signPlayer = plugin.getServer().getPlayer(signUUID);
+            assert signPlayer != null;
+            player.sendMessage(langManager.get("message.failed.map-unsign-denied"));
             return;
         }
 
-        // Unsign the map
-        container.remove(plugin.getSignKey());
-        itemMeta.setLore(new ArrayList<>());
+        double unSignCost = configManager.getConfig().getDouble("economy.unsign-cost");
+        if (economyManager.isEconomyEnabled() && !economyManager.hasBalance(player, unSignCost)) {
+            player.sendMessage(langManager.get("message.failed.not-enough-money").replace("{cost}",
+                    String.valueOf(unSignCost)));
+            return;
+        }
 
-        // Set the ItemMeta back to the ItemStack
-        item.setItemMeta(itemMeta);
+        boolean success = unSignMap(itemStack);
 
-        player.sendMessage(langConfig.getString("msg-map-unsign"));
+        if (success) {
+            if (economyManager.isEconomyEnabled()) {
+                economyManager.withdraw(player, unSignCost);
+                player.sendMessage(langManager.get("message.success.map-unsign-with-cost").replace("{cost}",
+                        String.valueOf(unSignCost)));
+            } else {
+                player.sendMessage(langManager.get("message.success.map-unsign"));
+            }
+        } else {
+            player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
+        }
+    }
+
+    private void onForceSignCommand(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!isFilledMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
+            return;
+        }
+
+        boolean success = signMap(player, itemStack);
+        if (success) {
+            player.sendMessage(langManager.get("message.success.map-sign"));
+        } else {
+            player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
+        }
+    }
+
+    private void onForceUnSignCommand(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!isFilledMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
+            return;
+        }
+
+        boolean success = unSignMap(itemStack);
+
+        if (success) {
+            player.sendMessage(langManager.get("message.success.map-unsign"));
+        } else {
+            player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
+        }
     }
 }

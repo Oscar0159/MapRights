@@ -1,50 +1,40 @@
 package com.archerwn.mapRights.listeners;
 
 import com.archerwn.mapRights.MapRights;
-import org.bukkit.Material;
+import com.archerwn.mapRights.manager.LangManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.CrafterCraftEvent;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class MapCopyListener implements Listener {
-    private static final MapRights plugin = MapRights.getInstance();
+import static com.archerwn.mapRights.manager.MapManager.getSignUUID;
+import static com.archerwn.mapRights.manager.MapManager.isSignedMap;
 
-    // for 1.21 crafter
+public class MapCopyListener implements Listener {
+    private final MapRights plugin = MapRights.getInstance();
+
+    private final LangManager langManager = LangManager.getInstance();
+
     @EventHandler
     public void onMapCopy(CrafterCraftEvent event) {
-        ItemStack item = event.getResult();
+        // For 1.21 crafter
 
-        // If item is not a filled map, return
-        if (item.getType() != Material.FILLED_MAP) {
-            return;
+        ItemStack itemStack = event.getResult();
+
+        if (isSignedMap(itemStack)) {
+            event.setCancelled(true);
         }
-
-        // If map doesn't have ItemMeta, return
-        if (!item.hasItemMeta()) {
-            return;
-        }
-
-        ItemMeta itemMeta = item.getItemMeta();
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-
-        // If map didn't sign, return
-        if (!container.has(plugin.getSignKey())) {
-            return;
-        }
-
-        // Cancel the signed map copy
-        event.setCancelled(true);
     }
 
     @EventHandler
     public void onMapCopy(InventoryClickEvent event) {
+        // For any inventory
+
         // If slot type is not RESULT, return
         if (event.getSlotType() != InventoryType.SlotType.RESULT) {
             return;
@@ -59,41 +49,20 @@ public class MapCopyListener implements Listener {
             return;
         }
 
-        ItemStack item = event.getCurrentItem();
+        ItemStack itemStack = event.getCurrentItem();
 
-        // If item is empty, return
-        if (item == null) {
-            return;
-        }
-
-        // If item is not a filled map, return
-        if (item.getType() != Material.FILLED_MAP) {
-            return;
-        }
-
-        // If map doesn't have ItemMeta, return
-        if (!item.hasItemMeta()) {
-            return;
-        }
-
-        ItemMeta itemMeta = item.getItemMeta();
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-
-        // If map didn't sign, return
-        if (!container.has(plugin.getSignKey())) {
+        if (!isSignedMap(itemStack)) {
             return;
         }
 
         // If map is signed by you, return
-        UUID uuid = UUID.fromString(container.get(plugin.getSignKey(), PersistentDataType.STRING));
-        if (uuid.equals(event.getWhoClicked().getUniqueId())) {
+        UUID signUUID = getSignUUID(itemStack);
+        UUID playerUUID = event.getWhoClicked().getUniqueId();
+        if (signUUID.equals(playerUUID)) {
             return;
         }
 
-        // Cancel the event
         event.setCancelled(true);
-
-        // Send a message to the player
-        event.getWhoClicked().sendMessage("You can't copy a map that is signed by someone else.");
+        event.getWhoClicked().sendMessage(langManager.get("message.failed.map-copy-denied"));
     }
 }

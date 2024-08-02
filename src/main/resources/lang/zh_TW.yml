@@ -1,11 +1,24 @@
-lore-signed-by: "§7由 §e{author} §7所有"
+message:
+  ## 所有訊息的前綴
+  prefix: "[MapRights] "
+  success:
+    map-sign: "已簽名地圖"
+    map-unsign: "已移除地圖簽名"
+    ## {cost} 將被替換為花費
+    map-sign-with-cost: "已簽名地圖，花費: §e{cost}"
+    map-unsign-with-cost: "已移除地圖簽名，花費: §e{cost}"
+  failed:
+    must-be-player: "你必須是玩家才能使用此命令！"
+    must-hold-filled-map: "你必須拿著地圖"
+    map-no-metadata: "地圖沒有元數據"
+    map-already-signed: "地圖無法重複簽名"
+    map-not-signed: "地圖沒有簽名可移除"
+    map-unsign-denied: "你無權移除此地圖的簽名"
+    map-copy-denied: "你無權複製此地圖"
+    ## {cost} 將被替換為花費
+    not-enough-money: "餘額不足, 無法執行此操作, 需要: §e{cost}"
+    no-permission: "你沒有權限使用此命令"
 
-msg-must-be-player: "你必須是一個玩家才能使用這個指令！"
-msg-must-hold-filled-map: "你必須拿著一張填滿的地圖"
-msg-map-does-not-have-metadata: "這張地圖沒有附加數據"
-msg-map-signed-by-you: "這張地圖已經被你簽名過了"
-msg-map-signed-by-other: "這張地圖已經被 {author} 簽名過了"
-msg-map-not-signed: "這張地圖沒有被簽名"
-msg-map-signed: "地圖已被簽署"
-msg-map-unsign: "地圖已經被取消簽署"
-msg-map-copy-denied: "你無法複製這張地圖"
+lore:
+  ## {author} 將被替換為簽名者的名字
+  signed-by: "§7由 §e{author} §7所有"
