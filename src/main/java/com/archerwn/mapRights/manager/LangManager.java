@@ -14,7 +14,7 @@ public class LangManager {
     private static final String DEFAULT_LANGUAGE = "en_US";
 
     @Getter
-    private static final String[] LANGUAGES = new String[]{"en_US", "zh_TW"};
+    private static final String[] LANGUAGES = new String[]{"en_US", "zh_TW", "zh_CN"};
 
     @Getter
     private YamlConfiguration lang;
