@@ -6,7 +6,7 @@
 language: 'en_US'
 
 economy:
-  ## Enable or disable the economy system, if enabled, [Vault] is required.
+  ## Enable or disable the economy system, if enabled, Vault and an economy plugin are required.
   enable: true
 
   ## Set to "0" to not charge for sign the map.
