@@ -1,11 +1,24 @@
-lore-signed-by: "§7Signed by §e{author}"
+message:
+  ## Prefix for all messages
+  prefix: "[MapRights] "
+  success:
+    map-sign: "The map has been signed"
+    map-unsign: "The map has been unsigned"
+    ## {cost} will be replaced with the cost
+    map-sign-with-cost: "The map has been signed, cost: §e{cost}"
+    map-unsign-with-cost: "The map has been unsigned, cost: §e{cost}"
+  failed:
+    must-be-player: "You must be a player to use this command!"
+    must-hold-filled-map: "You must hold a filled map"
+    map-no-metadata: "The map does not have metadata"
+    map-already-signed: "The map is already signed"
+    map-not-signed: "The map is not signed"
+    map-unsign-denied: "You are not allowed to unsign this map"
+    map-copy-denied: "You are not allowed to copy this map"
+    ## {cost} will be replaced with the cost
+    not-enough-money: "Insufficient balance, unable to perform this operation, required: §e{cost}"
+    no-permission: "You do not have permission to use this command"
 
-msg-must-be-player: "You must be a player to use this command!"
-msg-must-hold-filled-map: "You must hold a filled map"
-msg-map-does-not-have-metadata: "The map does not have metadata"
-msg-map-signed-by-you: "The map is already signed by you"
-msg-map-signed-by-other: "The map is already signed by {author}"
-msg-map-not-signed: "The map is not signed"
-msg-map-signed: "The map has been signed"
-msg-map-unsign: "The map has been unsigned"
-msg-map-copy-denied: "You are not allowed to copy this map"
+lore:
+  ## {author} will be replaced with the author's name
+  signed-by: "§7Signed by §e{author}"

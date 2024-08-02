@@ -5,15 +5,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MapRightsCommandCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        List<String> completions = new ArrayList<>(Arrays.asList("sign", "unsign"));
+        List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
+            if (sender.hasPermission("maprights.sign")) {
+                completions.add("sign");
+            }
+            if (sender.hasPermission("maprights.unsign")) {
+                completions.add("unsign");
+            }
+            if (sender.hasPermission("maprights.forcesign")) {
+                completions.add("forcesign");
+            }
+            if (sender.hasPermission("maprights.forceunsign")) {
+                completions.add("forceunsign");
+            }
             completions.removeIf(s -> !s.startsWith(args[0]));
         }
 
