@@ -1,0 +1,24 @@
+message:
+  ## 所有消息的前缀
+  prefix: "[MapRights] "
+  success:
+    map-sign: "地图已被签名"
+    map-unsign: "地图签名已被抹去"
+    ## {cost} 会被替换为签名价格
+    map-sign-with-cost: "你花费了 §e{cost} §f为地图签名"
+    map-unsign-with-cost: "你花费了 §e{cost} §f抹去了地图的签名"
+  failed:
+    must-be-player: "你必须是玩家才可以执行这个命令!"
+    must-hold-filled-map: "你必须持有一张已使用过的地图"
+    map-no-metadata: "该地图不包含可用数据"
+    map-already-signed: "地图已被其他玩家签名"
+    map-not-signed: "地图尚未被签名"
+    map-unsign-denied: "你不能抹去这张地图上的签名"
+    map-copy-denied: "你不能复制这张地图"
+    ## {cost} 会被替换为地图签名价格
+    not-enough-money: "金币不足, 你需要 §e{cost} §f才可为地图签名"
+    no-permission: "你没有执行此命令的权限"
+
+lore:
+  ## {author} 会被替换为签名者的名称
+  signed-by: "§7由 §e{author} §f签名"
