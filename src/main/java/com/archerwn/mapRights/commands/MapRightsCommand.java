@@ -4,6 +4,7 @@ import com.archerwn.mapRights.MapRights;
 import com.archerwn.mapRights.manager.ConfigManager;
 import com.archerwn.mapRights.manager.EconomyManager;
 import com.archerwn.mapRights.manager.LangManager;
+import com.archerwn.mapRights.manager.MapManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,8 +14,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-import static com.archerwn.mapRights.manager.MapManager.*;
-
 public class MapRightsCommand implements CommandExecutor {
 
     private final MapRights plugin = MapRights.getInstance();
@@ -22,6 +21,8 @@ public class MapRightsCommand implements CommandExecutor {
     private final ConfigManager configManager = ConfigManager.getInstance();
 
     private final LangManager langManager = LangManager.getInstance();
+
+    private final MapManager mapManager = MapManager.getInstance();
 
     private final EconomyManager economyManager = EconomyManager.getInstance();
 
@@ -77,12 +78,12 @@ public class MapRightsCommand implements CommandExecutor {
     private void onSignCommand(Player player) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (!isFilledMap(itemStack)) {
+        if (!mapManager.isFilledMap(itemStack)) {
             player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
             return;
         }
 
-        if (isSignedMap(itemStack)) {
+        if (mapManager.isSignedMap(itemStack)) {
             player.sendMessage(langManager.get("message.failed.map-already-signed"));
             return;
         }
@@ -94,7 +95,7 @@ public class MapRightsCommand implements CommandExecutor {
             return;
         }
 
-        boolean success = signMap(player, itemStack);
+        boolean success = mapManager.signMap(player, itemStack);
         if (success) {
             if (economyManager.isEconomyEnabled()) {
                 economyManager.withdraw(player, signCost);
@@ -111,18 +112,18 @@ public class MapRightsCommand implements CommandExecutor {
     private void onUnSignCommand(Player player) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (!isFilledMap(itemStack)) {
+        if (!mapManager.isFilledMap(itemStack)) {
             player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
             return;
         }
 
-        if (!isSignedMap(itemStack)) {
+        if (!mapManager.isSignedMap(itemStack)) {
             player.sendMessage(langManager.get("message.failed.map-not-signed"));
             return;
         }
 
         // If the map is signed by someone else, return
-        UUID signUUID = getSignUUID(itemStack);
+        UUID signUUID = mapManager.getSignUUID(itemStack);
         UUID playerUUID = player.getUniqueId();
         if (!signUUID.equals(playerUUID)) {
             Player signPlayer = plugin.getServer().getPlayer(signUUID);
@@ -138,7 +139,7 @@ public class MapRightsCommand implements CommandExecutor {
             return;
         }
 
-        boolean success = unSignMap(itemStack);
+        boolean success = mapManager.unSignMap(itemStack);
 
         if (success) {
             if (economyManager.isEconomyEnabled()) {
@@ -156,12 +157,12 @@ public class MapRightsCommand implements CommandExecutor {
     private void onForceSignCommand(Player player) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (!isFilledMap(itemStack)) {
+        if (!mapManager.isFilledMap(itemStack)) {
             player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
             return;
         }
 
-        boolean success = signMap(player, itemStack);
+        boolean success = mapManager.signMap(player, itemStack);
         if (success) {
             player.sendMessage(langManager.get("message.success.map-sign"));
         } else {
@@ -172,12 +173,12 @@ public class MapRightsCommand implements CommandExecutor {
     private void onForceUnSignCommand(Player player) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (!isFilledMap(itemStack)) {
+        if (!mapManager.isFilledMap(itemStack)) {
             player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
             return;
         }
 
-        boolean success = unSignMap(itemStack);
+        boolean success = mapManager.unSignMap(itemStack);
 
         if (success) {
             player.sendMessage(langManager.get("message.success.map-unsign"));
