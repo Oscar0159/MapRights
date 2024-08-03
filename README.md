@@ -2,14 +2,14 @@
 
 A Minecraft plugin that allows players to sign maps, protecting their creations from unauthorized copying.
 
-![MapRights](https://github.com/Oscar0159/MapRights/blob/develop/assets/MapRights.png?raw=true)
+![MapRights](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/assets/MapRights.png)
 
 # Screenshots & Gifs
 ### Sign & Unsign
-![MapRightsSignUnsign](https://github.com/Oscar0159/MapRights/blob/develop/assets/MapRightsSignUnsign.gif?raw=true)
+![MapRightsSignUnsign](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/assets/MapRightsSignUnsign.gif)
 
 ### Copy Denied
-![MapRightsCopyDenied](https://github.com/Oscar0159/MapRights/blob/develop/assets/MapRightsCopyDenied.gif?raw=true)
+![MapRightsCopyDenied](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/assets/MapRightsCopyDenied.gif)
 
 # Tested Minecraft Versions
 
