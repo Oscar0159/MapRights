@@ -16,12 +16,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class MapManager {
+    public static final NamespacedKey SIGN_KEY = new NamespacedKey(MapRights.getInstance(), "sign");
+    public static final NamespacedKey LORE_KEY = new NamespacedKey(MapRights.getInstance(), "lore");
+
     @Getter
     private static final MapManager instance = new MapManager();
-
-    private static final NamespacedKey signKey = new NamespacedKey(MapRights.getInstance(), "sign");
-
-    private static final NamespacedKey loreKey = new NamespacedKey(MapRights.getInstance(), "lore");
 
     private MapManager() {
     }
@@ -39,7 +38,7 @@ public class MapManager {
         assert itemMeta != null;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-        return container.has(signKey, PersistentDataType.STRING);
+        return container.has(SIGN_KEY, PersistentDataType.STRING);
     }
 
     public UUID getSignUUID(@NonNull ItemStack itemStack) {
@@ -47,7 +46,7 @@ public class MapManager {
         assert itemMeta != null;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-        return UUID.fromString(Objects.requireNonNullElse(container.get(signKey, PersistentDataType.STRING), ""));
+        return UUID.fromString(Objects.requireNonNullElse(container.get(SIGN_KEY, PersistentDataType.STRING), ""));
     }
 
     public boolean signMap(@NonNull Player player, @NonNull ItemStack itemStack) {
@@ -61,7 +60,7 @@ public class MapManager {
 
         // Set sign key
         UUID uuid = player.getUniqueId();
-        container.set(signKey, PersistentDataType.STRING, uuid.toString());
+        container.set(SIGN_KEY, PersistentDataType.STRING, uuid.toString());
 
         // Get current lore
         ArrayList<String> lore = new ArrayList<>();
@@ -70,15 +69,15 @@ public class MapManager {
         }
 
         // Remove old sign lore
-        if (container.has(loreKey, PersistentDataType.STRING)) {
-            String oldSign = container.get(loreKey, PersistentDataType.STRING);
+        if (container.has(LORE_KEY, PersistentDataType.STRING)) {
+            String oldSign = container.get(LORE_KEY, PersistentDataType.STRING);
             lore.remove(oldSign);
         }
 
         // Add new sign lore
         String newLore = LangManager.getInstance().get("lore.signed-by").replace("{author}", player.getName());
         lore.add(newLore);
-        container.set(loreKey, PersistentDataType.STRING, newLore);
+        container.set(LORE_KEY, PersistentDataType.STRING, newLore);
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
 
@@ -95,7 +94,7 @@ public class MapManager {
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
         // Remove sign key
-        container.remove(signKey);
+        container.remove(SIGN_KEY);
 
         // Get current lore
         ArrayList<String> lore = new ArrayList<>();
@@ -104,10 +103,10 @@ public class MapManager {
         }
 
         // Remove old sign lore
-        if (container.has(loreKey, PersistentDataType.STRING)) {
-            String oldSign = container.get(loreKey, PersistentDataType.STRING);
+        if (container.has(LORE_KEY, PersistentDataType.STRING)) {
+            String oldSign = container.get(LORE_KEY, PersistentDataType.STRING);
             lore.remove(oldSign);
-            container.remove(loreKey);
+            container.remove(LORE_KEY);
         }
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
