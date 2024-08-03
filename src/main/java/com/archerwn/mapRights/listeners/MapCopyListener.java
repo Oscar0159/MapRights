@@ -2,6 +2,7 @@ package com.archerwn.mapRights.listeners;
 
 import com.archerwn.mapRights.MapRights;
 import com.archerwn.mapRights.manager.LangManager;
+import com.archerwn.mapRights.manager.MapManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.CrafterCraftEvent;
@@ -12,13 +13,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-import static com.archerwn.mapRights.manager.MapManager.getSignUUID;
-import static com.archerwn.mapRights.manager.MapManager.isSignedMap;
-
 public class MapCopyListener implements Listener {
     private final MapRights plugin = MapRights.getInstance();
 
     private final LangManager langManager = LangManager.getInstance();
+
+    private final MapManager mapManager = MapManager.getInstance();
 
     @EventHandler
     public void onMapCopy(CrafterCraftEvent event) {
@@ -26,7 +26,7 @@ public class MapCopyListener implements Listener {
 
         ItemStack itemStack = event.getResult();
 
-        if (isSignedMap(itemStack)) {
+        if (mapManager.isSignedMap(itemStack)) {
             event.setCancelled(true);
         }
     }
@@ -50,13 +50,16 @@ public class MapCopyListener implements Listener {
         }
 
         ItemStack itemStack = event.getCurrentItem();
+        if (itemStack == null) {
+            return;
+        }
 
-        if (!isSignedMap(itemStack)) {
+        if (!mapManager.isSignedMap(itemStack)) {
             return;
         }
 
         // If map is signed by you, return
-        UUID signUUID = getSignUUID(itemStack);
+        UUID signUUID = mapManager.getSignUUID(itemStack);
         UUID playerUUID = event.getWhoClicked().getUniqueId();
         if (signUUID.equals(playerUUID)) {
             return;

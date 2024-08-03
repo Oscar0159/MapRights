@@ -2,6 +2,7 @@ package com.archerwn.mapRights.manager;
 
 import com.archerwn.mapRights.MapRights;
 import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -20,15 +21,17 @@ public class MapManager {
 
     private static final NamespacedKey signKey = new NamespacedKey(MapRights.getInstance(), "sign");
 
+    private static final NamespacedKey loreKey = new NamespacedKey(MapRights.getInstance(), "lore");
+
     private MapManager() {
     }
 
-    public static boolean isFilledMap(ItemStack itemStack) {
+    public boolean isFilledMap(@NonNull ItemStack itemStack) {
         return itemStack.getType() == Material.FILLED_MAP;
     }
 
-    public static boolean isSignedMap(ItemStack itemStack) {
-        if (itemStack == null || itemStack.getType() != Material.FILLED_MAP || !itemStack.hasItemMeta()) {
+    public boolean isSignedMap(@NonNull ItemStack itemStack) {
+        if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
             return false;
         }
 
@@ -39,7 +42,7 @@ public class MapManager {
         return container.has(signKey, PersistentDataType.STRING);
     }
 
-    public static UUID getSignUUID(ItemStack itemStack) {
+    public UUID getSignUUID(@NonNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
@@ -47,37 +50,68 @@ public class MapManager {
         return UUID.fromString(Objects.requireNonNullElse(container.get(signKey, PersistentDataType.STRING), ""));
     }
 
-    public static boolean signMap(Player player, ItemStack map) {
-        if (map == null || !map.hasItemMeta()) {
+    public boolean signMap(@NonNull Player player, @NonNull ItemStack itemStack) {
+        if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
             return false;
         }
 
-        ItemMeta itemMeta = map.getItemMeta();
+        ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
+        // Set sign key
         UUID uuid = player.getUniqueId();
         container.set(signKey, PersistentDataType.STRING, uuid.toString());
-        ArrayList<String> lore = new ArrayList<>();
-        lore.add(LangManager.getInstance().get("lore.signed-by").replace("{author}", player.getName()));
-        itemMeta.setLore(lore);
 
-        map.setItemMeta(itemMeta);
+        // Get current lore
+        ArrayList<String> lore = new ArrayList<>();
+        if (itemMeta.hasLore()) {
+            lore.addAll(itemMeta.getLore());
+        }
+
+        // Remove old sign lore
+        if (container.has(loreKey, PersistentDataType.STRING)) {
+            String oldSign = container.get(loreKey, PersistentDataType.STRING);
+            lore.remove(oldSign);
+        }
+
+        // Add new sign lore
+        String newLore = LangManager.getInstance().get("lore.signed-by").replace("{author}", player.getName());
+        lore.add(newLore);
+        container.set(loreKey, PersistentDataType.STRING, newLore);
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+
         return true;
     }
 
-    public static boolean unSignMap(ItemStack map) {
-        if (map==null || !map.hasItemMeta()) {
+    public boolean unSignMap(@NonNull ItemStack itemStack) {
+        if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
             return false;
         }
 
-        ItemMeta itemMeta = map.getItemMeta();
+        ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        container.remove(signKey);
-        itemMeta.setLore(new ArrayList<>());
 
-        map.setItemMeta(itemMeta);
+        // Remove sign key
+        container.remove(signKey);
+
+        // Get current lore
+        ArrayList<String> lore = new ArrayList<>();
+        if (itemMeta.hasLore()) {
+            lore.addAll(itemMeta.getLore());
+        }
+
+        // Remove old sign lore
+        if (container.has(loreKey, PersistentDataType.STRING)) {
+            String oldSign = container.get(loreKey, PersistentDataType.STRING);
+            lore.remove(oldSign);
+            container.remove(loreKey);
+        }
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+
         return true;
     }
 }
