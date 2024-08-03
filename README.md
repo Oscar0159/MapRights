@@ -2,19 +2,25 @@
 
 A Minecraft plugin that allows players to sign maps, protecting their creations from unauthorized copying.
 
-![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.png)
+![MapRights](https://github.com/Oscar0159/MapRights/blob/develop/assets/MapRights.png?raw=true)
 
-# Demo
+# Screenshots & Gifs
+### Sign & Unsign
+![MapRightsSignUnsign](https://github.com/Oscar0159/MapRights/blob/develop/assets/MapRightsSignUnsign.gif?raw=true)
 
-![](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/MapRights.gif)
+### Copy Denied
+![MapRightsCopyDenied](https://github.com/Oscar0159/MapRights/blob/develop/assets/MapRightsCopyDenied.gif?raw=true)
 
 # Tested Minecraft Versions
 
 - 1.21
 
 # Soft Dependencies
-- [Vault](https://www.spigotmc.org/resources/vault.34315/) - A permissions, chat, & economy API to give plugins easy hooks into these systems.
-- Any economy plugin that supports Vault (e.g. [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/) or [XConomy](https://www.spigotmc.org/resources/xconomy.75669/))
+
+- [Vault](https://www.spigotmc.org/resources/vault.34315/) - A permissions, chat, & economy API to give plugins easy
+  hooks into these systems.
+- Any economy plugin that supports Vault (e.g. [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/)
+  or [XConomy](https://www.spigotmc.org/resources/xconomy.75669/))
 
 # Commands
 
