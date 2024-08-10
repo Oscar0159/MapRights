@@ -5,6 +5,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class LangManager {
     @Getter
@@ -48,11 +50,28 @@ public class LangManager {
     public void setup(JavaPlugin plugin, String language) {
         this.plugin = plugin;
 
-        // Save all the language files to the lang folder
+        // Check if the language files exist, if not, create them, otherwise, update them
         for (String lang : LANGUAGES) {
             File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
             if (!langFile.exists()) {
                 plugin.saveResource("lang/" + lang + ".yml", false);
+            }
+
+            // Update the language file
+            YamlConfiguration resourceLang = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(Objects.requireNonNull(plugin.getResource("lang/" + lang + ".yml"))));
+            YamlConfiguration targetLang = YamlConfiguration.loadConfiguration(langFile);
+
+            for (String key : targetLang.getKeys(true)) {
+                if (resourceLang.contains(key)) {
+                    resourceLang.set(key, targetLang.get(key));
+                }
+            }
+
+            try {
+                resourceLang.save(langFile);
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to update language file: " + lang + ".yml");
             }
         }
 
