@@ -5,10 +5,13 @@ A Minecraft plugin that allows players to sign maps, protecting their creations 
 ![MapRights](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/assets/MapRights.png)
 
 # Screenshots & Gifs
+
 ### Sign & Unsign
+
 ![MapRightsSignUnsign](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/assets/MapRightsSignUnsign.gif)
 
 ### Copy Denied
+
 ![MapRightsCopyDenied](https://raw.githubusercontent.com/Oscar0159/MapRights/develop/assets/MapRightsCopyDenied.gif)
 
 # Tested Minecraft Versions
@@ -21,6 +24,8 @@ A Minecraft plugin that allows players to sign maps, protecting their creations 
   hooks into these systems.
 - Any economy plugin that supports Vault (e.g. [EssentialsX](https://www.spigotmc.org/resources/essentialsx.9089/)
   or [XConomy](https://www.spigotmc.org/resources/xconomy.75669/))
+- [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245/) - A plugin that allows server owners to
+  use placeholders from other plugins in their server.
 
 # Commands
 
@@ -39,6 +44,14 @@ A Minecraft plugin that allows players to sign maps, protecting their creations 
 | maprights.unsign      | true    | Allows the player to unsign a map        |
 | maprights.forcesign   | op      | Allows players to forcefully sign maps   |
 | maprights.forceunsign | op      | Allows players to forcefully unsign maps |
+
+# PlaceholdersAPI
+
+| Placeholder                 | Description                  |
+|:----------------------------|:-----------------------------|
+| %maprights_hold_map_author% | Author of the map being held |
+| %maprights_sign_cost%       | Cost to sign a map           |
+| %maprights_unsign_cost%     | Cost to unsign a map         |
 
 # Config.yml
 
