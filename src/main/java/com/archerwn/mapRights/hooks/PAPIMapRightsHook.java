@@ -54,7 +54,7 @@ public class PAPIMapRightsHook extends PlaceholderExpansion {
     @Override
     @Nullable
     public String onPlaceholderRequest(Player player, @NotNull String params) {
-        if (params.equalsIgnoreCase("hold_map_author")) {
+        if (params.equalsIgnoreCase("author")) {
             if (player == null) {
                 return null;
             }
