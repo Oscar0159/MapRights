@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class MapRightsCommand implements CommandExecutor {
@@ -67,6 +68,13 @@ public class MapRightsCommand implements CommandExecutor {
                     return true;
                 }
                 onForceUnSignCommand(player);
+                break;
+            case "info":
+                if (!player.hasPermission("maprights.info")) {
+                    player.sendMessage(langManager.get("message.failed.no-permission"));
+                    return true;
+                }
+                onInfoCommand(player);
                 break;
             default:
                 return false;
@@ -185,5 +193,28 @@ public class MapRightsCommand implements CommandExecutor {
         } else {
             player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
         }
+    }
+
+    private void onInfoCommand(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!mapManager.isFilledMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
+            return;
+        }
+
+        if (!mapManager.isSignedMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.map-no-info"));
+            return;
+        }
+
+        Map<String, String> info = mapManager.getInfo(itemStack);
+        player.sendMessage(langManager.get("message.success.map-info")
+                .replace("{signTime}", info.getOrDefault("signTime", "null"))
+                .replace("{signWorld}", info.getOrDefault("signWorld", "null"))
+                .replace("{signLocation}", info.getOrDefault("signLocation", "null"))
+                .replace("{mapWorld}", info.getOrDefault("mapWorld", "null"))
+                .replace("{mapLocation}", info.getOrDefault("mapLocation", "null"))
+        );
     }
 }
