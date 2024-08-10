@@ -25,6 +25,9 @@ public class MapRightsCommandCompleter implements TabCompleter {
             if (sender.hasPermission("maprights.forceunsign")) {
                 completions.add("forceunsign");
             }
+            if (sender.hasPermission("maprights.info")) {
+                completions.add("info");
+            }
             completions.removeIf(s -> !s.startsWith(args[0]));
         }
 

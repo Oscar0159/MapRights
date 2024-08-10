@@ -21,6 +21,7 @@ permissions:
       maprights.unsign: true
       maprights.forcesign: true
       maprights.forceunsign: true
+      maprights.info: true
 
   maprights.sign:
     description: Allows players to sign maps.
@@ -33,6 +34,9 @@ permissions:
     default: op
   maprights.forceunsign:
     description: Allows players to forcefully unsign maps.
+    default: op
+  maprights.info:
+    description: Allows players to view map information.
     default: op
 
 

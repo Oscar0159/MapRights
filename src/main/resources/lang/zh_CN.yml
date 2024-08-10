@@ -7,7 +7,14 @@ message:
     ## {cost} 会被替换为签名价格
     map-sign-with-cost: "你花费了 §e{cost} §f为地图签名"
     map-unsign-with-cost: "你花费了 §e{cost} §f抹去了地图的签名"
+    ## {signTime} 会被替换为签名时间
+    ## {signWorld} 会被替换为签名世界
+    ## {signLocation} 会被替换为签名位置
+    ## {mapWorld} 会被替换为地图世界
+    ## {mapLocation} 会被替换为地图位置
+    map-info: "地图信息:\n  签名时间: §e{signTime}\n  §f签名世界: §e{signWorld}\n  §f签名位置: §e{signLocation}\n  §f地图世界: §e{mapWorld}\n  §f地图位置: §e{mapLocation}"
   failed:
+    no-permission: "你没有执行此命令的权限"
     must-be-player: "你必须是玩家才可以执行这个命令!"
     must-hold-filled-map: "你必须持有一张已使用过的地图"
     map-no-metadata: "该地图不包含可用数据"
@@ -17,7 +24,7 @@ message:
     map-copy-denied: "你不能复制这张地图"
     ## {cost} 会被替换为地图签名价格
     not-enough-money: "金币不足, 你需要 §e{cost} §f才可为地图签名"
-    no-permission: "你没有执行此命令的权限"
+    map-no-info: "该地图不包含信息"
 
 lore:
   ## {author} 会被替换为签名者的名称
