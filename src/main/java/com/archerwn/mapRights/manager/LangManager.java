@@ -80,7 +80,7 @@ public class LangManager {
         langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
         if (!langFile.exists()) {
             this.language = DEFAULT_LANGUAGE;
-            langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
+            langFile = new File(plugin.getDataFolder(), "lang/" + DEFAULT_LANGUAGE + ".yml");
         } else {
             this.language = language;
         }
