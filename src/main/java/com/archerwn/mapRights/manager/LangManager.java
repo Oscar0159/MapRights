@@ -52,14 +52,15 @@ public class LangManager {
 
         // Check if the language files exist, if not, create them, otherwise, update them
         for (String lang : LANGUAGES) {
-            File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
+            String langPath = "lang/" + lang + ".yml";
+            File langFile = new File(plugin.getDataFolder(), langPath);
             if (!langFile.exists()) {
-                plugin.saveResource("lang/" + lang + ".yml", false);
+                plugin.saveResource(langPath, false);
             }
 
             // Update the language file
-            YamlConfiguration resourceLang = YamlConfiguration.loadConfiguration(
-                    new InputStreamReader(Objects.requireNonNull(plugin.getResource("lang/" + lang + ".yml"))));
+            InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(plugin.getResource(langPath)));
+            YamlConfiguration resourceLang = YamlConfiguration.loadConfiguration(reader);
             YamlConfiguration targetLang = YamlConfiguration.loadConfiguration(langFile);
 
             for (String key : targetLang.getKeys(true)) {
