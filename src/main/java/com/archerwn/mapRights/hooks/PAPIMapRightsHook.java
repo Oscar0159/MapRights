@@ -2,9 +2,7 @@ package com.archerwn.mapRights.hooks;
 
 import com.archerwn.mapRights.manager.ConfigManager;
 import com.archerwn.mapRights.manager.MapManager;
-import lombok.Getter;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
