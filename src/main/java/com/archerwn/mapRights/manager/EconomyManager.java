@@ -66,5 +66,6 @@ public class EconomyManager {
             return;
         }
         economy = rsp.getProvider();
+        plugin.getLogger().info("Economy feature has been enabled!");
     }
 }
