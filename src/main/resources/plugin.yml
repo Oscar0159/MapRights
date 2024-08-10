@@ -5,7 +5,7 @@ api-version: '1.21'
 author: ArcherWn
 description: A Minecraft plugin that allows players to sign maps, protecting their creations from unauthorized copying.
 
-softdepend: [ Vault ]
+softdepend: [ Vault, PlaceholderAPI ]
 
 commands:
   maprights:

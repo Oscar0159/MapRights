@@ -2,14 +2,15 @@ package com.archerwn.mapRights.manager;
 
 import com.archerwn.mapRights.MapRights;
 import lombok.Getter;
-import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,11 +26,11 @@ public class MapManager {
     private MapManager() {
     }
 
-    public boolean isFilledMap(@NonNull ItemStack itemStack) {
+    public boolean isFilledMap(@NotNull ItemStack itemStack) {
         return itemStack.getType() == Material.FILLED_MAP;
     }
 
-    public boolean isSignedMap(@NonNull ItemStack itemStack) {
+    public boolean isSignedMap(@NotNull ItemStack itemStack) {
         if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
             return false;
         }
@@ -41,7 +42,11 @@ public class MapManager {
         return container.has(SIGN_KEY, PersistentDataType.STRING);
     }
 
-    public UUID getSignUUID(@NonNull ItemStack itemStack) {
+    public UUID getSignUUID(@NotNull ItemStack itemStack) {
+        if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
+            return UUID.fromString("");
+        }
+
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
@@ -49,7 +54,23 @@ public class MapManager {
         return UUID.fromString(Objects.requireNonNullElse(container.get(SIGN_KEY, PersistentDataType.STRING), ""));
     }
 
-    public boolean signMap(@NonNull Player player, @NonNull ItemStack itemStack) {
+    public String getAuthor(@NotNull ItemStack itemStack) {
+        if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
+            return "";
+        }
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        assert itemMeta != null;
+        MapRights.getInstance().getLogger().info("ItemMeta: " + itemMeta);
+        UUID uuid = getSignUUID(itemStack);
+        MapRights.getInstance().getLogger().info("UUID: " + uuid);
+        Player player = MapRights.getInstance().getServer().getPlayer(uuid);
+        OfflinePlayer offlinePlayer = MapRights.getInstance().getServer().getOfflinePlayer(uuid);
+        String name = player != null ? player.getName() : offlinePlayer.getName();
+        return name != null ? name : "Unknown";
+    }
+
+    public boolean signMap(@NotNull Player player, @NotNull ItemStack itemStack) {
         if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
             return false;
         }
@@ -84,7 +105,7 @@ public class MapManager {
         return true;
     }
 
-    public boolean unSignMap(@NonNull ItemStack itemStack) {
+    public boolean unSignMap(@NotNull ItemStack itemStack) {
         if (!isFilledMap(itemStack) || !itemStack.hasItemMeta()) {
             return false;
         }
