@@ -1,5 +1,6 @@
 package com.archerwn.mapRights.manager;
 
+import com.archerwn.mapRights.MapRights;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -56,16 +57,19 @@ public class LangManager {
             File langFile = new File(plugin.getDataFolder(), langPath);
             if (!langFile.exists()) {
                 plugin.saveResource(langPath, false);
+                continue;
             }
 
             // Update the language file
             InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(plugin.getResource(langPath)));
             YamlConfiguration resourceLang = YamlConfiguration.loadConfiguration(reader);
-            YamlConfiguration targetLang = YamlConfiguration.loadConfiguration(langFile);
+            YamlConfiguration existingLang = YamlConfiguration.loadConfiguration(langFile);
 
-            for (String key : targetLang.getKeys(true)) {
-                if (resourceLang.contains(key)) {
-                    resourceLang.set(key, targetLang.get(key));
+            for (String key : existingLang.getKeys(true)) {
+                if (existingLang.get(key) instanceof String) {
+                    if (resourceLang.contains(key)) {
+                        resourceLang.set(key, existingLang.get(key));
+                    }
                 }
             }
 
