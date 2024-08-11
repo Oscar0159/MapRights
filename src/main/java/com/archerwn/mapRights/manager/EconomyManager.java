@@ -60,11 +60,11 @@ public class EconomyManager {
             return;
         }
         RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
-        plugin.getLogger().info(plugin.getServer().getServicesManager().getKnownServices().toString());
         if (rsp == null) {
             plugin.getLogger().warning("There is no economy plugin installed. Economy feature is disabled.");
             return;
         }
         economy = rsp.getProvider();
+        plugin.getLogger().info("Economy feature has been enabled!");
     }
 }

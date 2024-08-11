@@ -2,6 +2,7 @@ package com.archerwn.mapRights;
 
 import com.archerwn.mapRights.commands.MapRightsCommand;
 import com.archerwn.mapRights.commands.MapRightsCommandCompleter;
+import com.archerwn.mapRights.hooks.PAPIMapRightsHook;
 import com.archerwn.mapRights.listeners.MapCopyListener;
 import com.archerwn.mapRights.manager.ConfigManager;
 import com.archerwn.mapRights.manager.EconomyManager;
@@ -30,6 +31,17 @@ public final class MapRights extends JavaPlugin {
         ConfigManager.getInstance().setup(this);
         LangManager.getInstance().setup(this, ConfigManager.getInstance().getConfig().getString("language"));
         EconomyManager.getInstance().setup(this, ConfigManager.getInstance().getConfig().getBoolean("economy.enable"));
+
+        // Hook
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null &&
+            Objects.requireNonNull(getServer().getPluginManager().getPlugin("PlaceholderAPI")).isEnabled()) {
+            boolean success = new PAPIMapRightsHook(this).register();
+            if (success) {
+                getLogger().info("PlaceholderAPI hook has been enabled!");
+            } else {
+                getLogger().warning("PlaceholderAPI hook has failed to enable!");
+            }
+        }
 
         Objects.requireNonNull(getCommand("maprights")).setExecutor(new MapRightsCommand());
         Objects.requireNonNull(getCommand("maprights")).setTabCompleter(new MapRightsCommandCompleter());

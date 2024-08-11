@@ -1,10 +1,13 @@
 package com.archerwn.mapRights.manager;
 
+import com.archerwn.mapRights.MapRights;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.util.Objects;
 
 public class LangManager {
     @Getter
@@ -48,11 +51,32 @@ public class LangManager {
     public void setup(JavaPlugin plugin, String language) {
         this.plugin = plugin;
 
-        // Save all the language files to the lang folder
+        // Check if the language files exist, if not, create them, otherwise, update them
         for (String lang : LANGUAGES) {
-            File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
+            String langPath = "lang/" + lang + ".yml";
+            File langFile = new File(plugin.getDataFolder(), langPath);
             if (!langFile.exists()) {
-                plugin.saveResource("lang/" + lang + ".yml", false);
+                plugin.saveResource(langPath, false);
+                continue;
+            }
+
+            // Update the language file
+            InputStreamReader reader = new InputStreamReader(Objects.requireNonNull(plugin.getResource(langPath)));
+            YamlConfiguration resourceLang = YamlConfiguration.loadConfiguration(reader);
+            YamlConfiguration existingLang = YamlConfiguration.loadConfiguration(langFile);
+
+            for (String key : existingLang.getKeys(true)) {
+                if (existingLang.get(key) instanceof String) {
+                    if (resourceLang.contains(key)) {
+                        resourceLang.set(key, existingLang.get(key));
+                    }
+                }
+            }
+
+            try {
+                resourceLang.save(langFile);
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to update language file: " + lang + ".yml");
             }
         }
 
@@ -60,7 +84,7 @@ public class LangManager {
         langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
         if (!langFile.exists()) {
             this.language = DEFAULT_LANGUAGE;
-            langFile = new File(plugin.getDataFolder(), "lang/" + language + ".yml");
+            langFile = new File(plugin.getDataFolder(), "lang/" + DEFAULT_LANGUAGE + ".yml");
         } else {
             this.language = language;
         }

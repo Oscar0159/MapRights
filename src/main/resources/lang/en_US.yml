@@ -7,7 +7,14 @@ message:
     ## {cost} will be replaced with the cost
     map-sign-with-cost: "The map has been signed, cost: §e{cost}"
     map-unsign-with-cost: "The map has been unsigned, cost: §e{cost}"
+    ## {signTime} will be replaced with the system time
+    ## {signWorld} will be replaced with the sign world
+    ## {signLocation} will be replaced with the sign location
+    ## {mapWorld} will be replaced with the map world
+    ## {mapLocation} will be replaced with the map location
+    map-info: "Map Info:\n  Sign Time: §e{signTime}\n  §fSign World: §e{signWorld}\n  §fSign Location: §e{signLocation}\n  §fMap World: §e{mapWorld}\n  §fMap Location: §e{mapLocation}"
   failed:
+    no-permission: "You do not have permission to use this command"
     must-be-player: "You must be a player to use this command!"
     must-hold-filled-map: "You must hold a filled map"
     map-no-metadata: "The map does not have metadata"
@@ -17,7 +24,7 @@ message:
     map-copy-denied: "You are not allowed to copy this map"
     ## {cost} will be replaced with the cost
     not-enough-money: "Insufficient balance, unable to perform this operation, required: §e{cost}"
-    no-permission: "You do not have permission to use this command"
+    map-no-info: "The map does not have info"
 
 lore:
   ## {author} will be replaced with the author's name
