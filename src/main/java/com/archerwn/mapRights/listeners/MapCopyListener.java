@@ -40,15 +40,6 @@ public class MapCopyListener implements Listener {
             return;
         }
 
-        // If inventory action is not PICKUP, return
-        if (event.getAction() != InventoryAction.PICKUP_ALL &&
-            event.getAction() != InventoryAction.PICKUP_HALF &&
-            event.getAction() != InventoryAction.PICKUP_ONE &&
-            event.getAction() != InventoryAction.PICKUP_SOME &&
-            event.getAction() != InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-            return;
-        }
-
         ItemStack itemStack = event.getCurrentItem();
         if (itemStack == null) {
             return;
