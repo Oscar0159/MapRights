@@ -55,6 +55,13 @@ public class MapRightsCommand implements CommandExecutor {
                 }
                 onUnSignCommand(player);
                 break;
+            case "resign":
+                if (!player.hasPermission("maprights.resign")) {
+                    player.sendMessage(langManager.get("message.failed.no-permission"));
+                    return true;
+                }
+                onResignCommand(player);
+                break;
             case "forcesign":
                 if (!player.hasPermission("maprights.forcesign")) {
                     player.sendMessage(langManager.get("message.failed.no-permission"));
@@ -157,6 +164,38 @@ public class MapRightsCommand implements CommandExecutor {
             } else {
                 player.sendMessage(langManager.get("message.success.map-unsign"));
             }
+        } else {
+            player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
+        }
+    }
+
+    private void onResignCommand(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (!mapManager.isFilledMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.must-hold-filled-map"));
+            return;
+        }
+
+        if (!mapManager.isSignedMap(itemStack)) {
+            player.sendMessage(langManager.get("message.failed.map-not-signed"));
+            return;
+        }
+
+        // If the map is signed by someone else, return
+        UUID signUUID = mapManager.getSignUUID(itemStack);
+        UUID playerUUID = player.getUniqueId();
+        if (!signUUID.equals(playerUUID)) {
+            Player signPlayer = plugin.getServer().getPlayer(signUUID);
+            assert signPlayer != null;
+            player.sendMessage(langManager.get("message.failed.map-resign-denied"));
+            return;
+        }
+
+        boolean success = mapManager.signMap(player, itemStack);
+
+        if (success) {
+            player.sendMessage(langManager.get("message.success.map-resign"));
         } else {
             player.sendMessage(langManager.get("message.failed.map-null-or-no-meta"));
         }

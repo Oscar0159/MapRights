@@ -19,6 +19,9 @@ public class MapRightsCommandCompleter implements TabCompleter {
             if (sender.hasPermission("maprights.unsign")) {
                 completions.add("unsign");
             }
+            if (sender.hasPermission("maprights.resign")) {
+                completions.add("resign");
+            }
             if (sender.hasPermission("maprights.forcesign")) {
                 completions.add("forcesign");
             }
