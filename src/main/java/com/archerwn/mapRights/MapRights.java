@@ -4,6 +4,7 @@ import com.archerwn.mapRights.commands.MapRightsCommand;
 import com.archerwn.mapRights.commands.MapRightsCommandCompleter;
 import com.archerwn.mapRights.hooks.PAPIMapRightsHook;
 import com.archerwn.mapRights.listeners.MapCopyListener;
+import com.archerwn.mapRights.listeners.MapCopyListener_v1_21;
 import com.archerwn.mapRights.manager.ConfigManager;
 import com.archerwn.mapRights.manager.EconomyManager;
 import com.archerwn.mapRights.manager.LangManager;
@@ -46,7 +47,11 @@ public final class MapRights extends JavaPlugin {
         Objects.requireNonNull(getCommand("maprights")).setExecutor(new MapRightsCommand());
         Objects.requireNonNull(getCommand("maprights")).setTabCompleter(new MapRightsCommandCompleter());
 
-        getServer().getPluginManager().registerEvents(new MapCopyListener(), this);
+        if (getServer().getVersion().contains("1.21")) {
+            getServer().getPluginManager().registerEvents(new MapCopyListener_v1_21(), this);
+        } else {
+            getServer().getPluginManager().registerEvents(new MapCopyListener(), this);
+        }
 
         getLogger().info("MapRights has been enabled!");
     }
