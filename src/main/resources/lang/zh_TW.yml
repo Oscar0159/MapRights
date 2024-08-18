@@ -4,6 +4,7 @@ message:
   success:
     map-sign: "已簽名地圖"
     map-unsign: "已移除地圖簽名"
+    map-resign: "已更新地圖簽名"
     ## {cost} 將被替換為花費
     map-sign-with-cost: "已簽名地圖，花費: §e{cost}"
     map-unsign-with-cost: "已移除地圖簽名，花費: §e{cost}"
@@ -19,8 +20,9 @@ message:
     must-hold-filled-map: "你必須拿著地圖"
     map-no-metadata: "地圖沒有元數據"
     map-already-signed: "地圖無法重複簽名"
-    map-not-signed: "地圖沒有簽名可移除"
+    map-not-signed: "地圖沒有簽名"
     map-unsign-denied: "你無權移除此地圖的簽名"
+    map-resign-denied: "你無權更新此地圖的簽名"
     map-copy-denied: "你無權複製此地圖"
     ## {cost} 將被替換為花費
     not-enough-money: "餘額不足, 無法執行此操作, 需要: §e{cost}"

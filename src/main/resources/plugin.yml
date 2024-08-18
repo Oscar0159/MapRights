@@ -1,7 +1,7 @@
 name: MapRights
 version: '${version}'
 main: com.archerwn.mapRights.MapRights
-api-version: '1.21'
+api-version: '1.20'
 author: ArcherWn
 description: A Minecraft plugin that allows players to sign maps, protecting their creations from unauthorized copying.
 
@@ -10,7 +10,7 @@ softdepend: [ Vault, PlaceholderAPI ]
 commands:
   maprights:
     description: Manage map rights.
-    usage: /<command> < sign | unsign | forcesign | forceunsign >
+    usage: /<command> < sign | unsign | resign | forcesign | forceunsign | info >
     aliases: [ mr ]
 
 permissions:
@@ -19,6 +19,7 @@ permissions:
     children:
       maprights.sign: true
       maprights.unsign: true
+      maprights.resign: true
       maprights.forcesign: true
       maprights.forceunsign: true
       maprights.info: true
@@ -28,6 +29,9 @@ permissions:
     default: true
   maprights.unsign:
     description: Allows players to unsign maps.
+    default: true
+  maprights.resign:
+    description: Allows players to resign maps.
     default: true
   maprights.forcesign:
     description: Allows players to forcefully sign maps.
