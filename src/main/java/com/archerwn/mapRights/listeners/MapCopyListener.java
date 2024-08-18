@@ -5,8 +5,6 @@ import com.archerwn.mapRights.manager.LangManager;
 import com.archerwn.mapRights.manager.MapManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.CrafterCraftEvent;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -14,22 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.UUID;
 
 public class MapCopyListener implements Listener {
-    private final MapRights plugin = MapRights.getInstance();
+    protected final MapRights plugin = MapRights.getInstance();
 
-    private final LangManager langManager = LangManager.getInstance();
+    protected final LangManager langManager = LangManager.getInstance();
 
-    private final MapManager mapManager = MapManager.getInstance();
-
-    @EventHandler
-    public void onMapCopy(CrafterCraftEvent event) {
-        // For 1.21 crafter
-
-        ItemStack itemStack = event.getResult();
-
-        if (mapManager.isSignedMap(itemStack)) {
-            event.setCancelled(true);
-        }
-    }
+    protected final MapManager mapManager = MapManager.getInstance();
 
     @EventHandler
     public void onMapCopy(InventoryClickEvent event) {
