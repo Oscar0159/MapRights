@@ -48,7 +48,7 @@ A Minecraft plugin that allows players to sign maps, protecting their creations 
 |:----------------------|:--------|:-----------------------------------------------------|
 | maprights.sign        | true    | Allows the player to sign a map                      |
 | maprights.unsign      | true    | Allows the player to unsign a map                    |
-| maprights.resign      | op      | Allows the player to resign a map                    |
+| maprights.resign      | true    | Allows the player to resign a map                    |
 | maprights.forcesign   | op      | Allows the player to forcefully sign maps            |
 | maprights.forceunsign | op      | Allows the player to forcefully unsign maps          |
 | maprights.info        | op      | Allows the player to view the information of the map |
