@@ -7,6 +7,8 @@ description: A Minecraft plugin that allows players to sign maps, protecting the
 
 softdepend: [ Vault, PlaceholderAPI ]
 
+folia-supported: true
+
 commands:
   maprights:
     description: Manage map rights.
